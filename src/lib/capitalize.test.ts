@@ -8,6 +8,12 @@ describe("transformTitle", () => {
     ).toBe("A Tale of Two Cities in the Age of Ai");
   });
 
+  it("supports ama title casing", () => {
+    expect(
+      transformTitle("finding care for children with asthma", "title-case", "ama")
+    ).toBe("Finding Care for Children With Asthma");
+  });
+
   it("capitalizes after punctuation in title case", () => {
     expect(
       transformTitle("learning design: a guide for teams", "title-case", "chicago")

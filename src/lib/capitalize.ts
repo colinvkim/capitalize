@@ -6,7 +6,7 @@ export type CapitalizationMode =
   | "first-letter-case"
   | "alternating-case";
 
-export type StyleGuide = "apa" | "mla" | "chicago" | "ap";
+export type StyleGuide = "apa" | "mla" | "chicago" | "ap" | "ama";
 
 export interface Option<T extends string> {
   value: T;
@@ -70,6 +70,11 @@ export const STYLE_GUIDE_OPTIONS: Option<StyleGuide>[] = [
     value: "ap",
     label: "AP",
     description: "Newsroom-style capitalization with concise word treatment."
+  },
+  {
+    value: "ama",
+    label: "AMA",
+    description: "Medical-journal-style capitalization with short connector words kept lowercase."
   }
 ];
 
@@ -171,6 +176,29 @@ const SMALL_WORDS: Record<StyleGuide, Set<string>> = {
     "to",
     "up",
     "vs"
+  ]),
+  ama: new Set([
+    "a",
+    "an",
+    "and",
+    "as",
+    "at",
+    "but",
+    "by",
+    "for",
+    "if",
+    "in",
+    "nor",
+    "of",
+    "on",
+    "or",
+    "per",
+    "the",
+    "to",
+    "up",
+    "via",
+    "vs",
+    "yet"
   ])
 };
 
