@@ -1,0 +1,20 @@
+{
+  "name": "capitalize",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.33.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.8",
+    "astro": "6.1.8",
+    "typescript": "5.9.3",
+    "vitest": "4.1.4"
+  }
+}

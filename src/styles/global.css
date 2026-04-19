@@ -1,0 +1,249 @@
+:root {
+  --font-sans: var(--font-inter), "Inter", system-ui, sans-serif;
+  --bg: #f6f1e8;
+  --bg-soft: #fffaf3;
+  --surface: rgba(255, 252, 246, 0.96);
+  --surface-strong: #ffffff;
+  --border: rgba(54, 40, 24, 0.12);
+  --border-strong: rgba(54, 40, 24, 0.2);
+  --text: #26180d;
+  --text-muted: #7b6856;
+  --accent: #bb5a2a;
+  --accent-soft: rgba(187, 90, 42, 0.12);
+  --shadow: 0 24px 60px rgba(62, 40, 17, 0.12);
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--text);
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.85), transparent 34%),
+    linear-gradient(180deg, var(--bg-soft) 0%, var(--bg) 100%);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.page-shell {
+  width: min(100% - 1.5rem, 56rem);
+  margin: 0 auto;
+  padding: 4rem 0 5rem;
+}
+
+.app-hero {
+  max-width: 38rem;
+  margin: 0 auto 2rem;
+  text-align: center;
+}
+
+.eyebrow,
+.panel-label,
+.helper-text,
+.status-text {
+  margin: 0;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.app-hero h1 {
+  margin: 0.75rem 0;
+  font-size: clamp(2.4rem, 7vw, 4.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.06em;
+}
+
+.lede {
+  margin: 0 auto;
+  max-width: 34rem;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--text-muted);
+}
+
+.app-shell {
+  display: flex;
+  justify-content: center;
+}
+
+.simple-card {
+  width: min(100%, 52rem);
+  padding: 1.4rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1.75rem;
+  box-shadow: var(--shadow);
+}
+
+.simple-head,
+.group-heading,
+.status-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.simple-head h2,
+.group-heading h3 {
+  margin: 0.15rem 0 0;
+  font-size: 1.2rem;
+  line-height: 1.15;
+}
+
+.field {
+  display: grid;
+  gap: 0.7rem;
+  margin-top: 1.25rem;
+}
+
+.field-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.live-input {
+  width: 100%;
+  min-height: 4rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: 1.1rem;
+  background: var(--surface-strong);
+  color: var(--text);
+  font-size: clamp(1.2rem, 2vw, 1.65rem);
+  line-height: 1.3;
+  letter-spacing: -0.03em;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.live-input:focus,
+.copy-button:focus-visible,
+.option-pill:has(input:focus-visible) {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(187, 90, 42, 0.16);
+}
+
+.control-stack {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 1.4rem;
+}
+
+.option-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 0.9rem;
+}
+
+.option-pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.8rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface-strong);
+  cursor: pointer;
+  transition: border-color 150ms ease, background 150ms ease, transform 150ms ease;
+}
+
+.option-pill:hover {
+  transform: translateY(-1px);
+  border-color: var(--border-strong);
+}
+
+.option-pill input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.option-pill:has(input:checked) {
+  background: var(--accent-soft);
+  border-color: rgba(187, 90, 42, 0.45);
+  color: var(--accent);
+}
+
+.option-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.copy-button {
+  border: 0;
+  border-radius: 999px;
+  padding: 0.8rem 1rem;
+  background: var(--accent);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 150ms ease, opacity 150ms ease;
+}
+
+.copy-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.copy-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.status-row {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.helper-text {
+  max-width: 26rem;
+  line-height: 1.55;
+}
+
+.status-text {
+  text-align: right;
+}
+
+@media (max-width: 720px) {
+  .page-shell {
+    width: min(100% - 1rem, 40rem);
+    padding-top: 2rem;
+  }
+
+  .simple-card {
+    padding: 1rem;
+    border-radius: 1.25rem;
+  }
+
+  .simple-head,
+  .group-heading,
+  .status-row {
+    display: grid;
+  }
+
+  .copy-button {
+    width: 100%;
+  }
+
+  .status-text {
+    text-align: left;
+  }
+}
