@@ -89,7 +89,6 @@ input {
   box-shadow: var(--shadow);
 }
 
-.simple-head,
 .group-heading,
 .status-row {
   display: flex;
@@ -98,7 +97,6 @@ input {
   gap: 1rem;
 }
 
-.simple-head h2,
 .group-heading h3 {
   margin: 0.15rem 0 0;
   font-size: 1.2rem;
@@ -116,10 +114,16 @@ input {
   font-weight: 700;
 }
 
+.input-shell {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
 .live-input {
   width: 100%;
   min-height: 4rem;
-  padding: 1rem 1.1rem;
+  padding: 1rem 8rem 1rem 1.1rem;
   border: 1px solid var(--border);
   border-radius: 1.1rem;
   background: var(--surface-strong);
@@ -130,12 +134,15 @@ input {
   transition: border-color 150ms ease, box-shadow 150ms ease;
 }
 
-.live-input:focus,
+.input-shell:has(.live-input:focus),
 .copy-button:focus-visible,
 .option-pill:has(input:focus-visible) {
   outline: none;
-  border-color: var(--accent);
   box-shadow: 0 0 0 4px rgba(187, 90, 42, 0.16);
+}
+
+.input-shell:has(.live-input:focus) .live-input {
+  border-color: var(--accent);
 }
 
 .control-stack {
@@ -188,18 +195,25 @@ input {
 }
 
 .copy-button {
+  position: absolute;
+  right: 0.65rem;
+  top: 50%;
+  transform: translateY(-50%);
   border: 0;
   border-radius: 999px;
-  padding: 0.8rem 1rem;
+  padding: 0.7rem 1rem;
   background: var(--accent);
   color: white;
   font-weight: 700;
   cursor: pointer;
-  transition: transform 150ms ease, opacity 150ms ease;
+  transition:
+    transform 150ms ease,
+    opacity 150ms ease,
+    background-color 150ms ease;
 }
 
 .copy-button:hover:not(:disabled) {
-  transform: translateY(-1px);
+  transform: translateY(calc(-50% - 1px));
 }
 
 .copy-button:disabled {
@@ -233,14 +247,28 @@ input {
     border-radius: 1.25rem;
   }
 
-  .simple-head,
   .group-heading,
   .status-row {
     display: grid;
   }
 
+  .input-shell {
+    display: grid;
+    gap: 0.75rem;
+  }
+
   .copy-button {
+    position: static;
+    transform: none;
     width: 100%;
+  }
+
+  .copy-button:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+
+  .live-input {
+    padding-right: 1.1rem;
   }
 
   .status-text {

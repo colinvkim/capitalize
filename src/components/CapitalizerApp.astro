@@ -3,44 +3,42 @@ import {
   CAPITALIZATION_MODE_OPTIONS,
   DEFAULT_CAPITALIZATION_MODE,
   DEFAULT_STYLE_GUIDE,
-  STYLE_GUIDE_OPTIONS
+  STYLE_GUIDE_OPTIONS,
 } from "../lib/capitalize";
 ---
 
 <section class="app-hero">
   <p class="eyebrow">Capitalize</p>
   <h1>Type title. App fixes caps live.</h1>
-  <p class="lede">
-    This tool rewrites your title as you type using title, sentence, upper, lower,
-    first-letter, or alternating case rules.
-  </p>
+  <p class="lede">Rewrite your title using different capitalization rules.</p>
 </section>
 
 <section class="app-shell" data-capitalizer-app>
   <div class="simple-card">
-    <div class="simple-head">
-      <div>
-        <p class="panel-label">Live field</p>
-        <h2>One box in. One box out.</h2>
-      </div>
-
-      <button class="copy-button" type="button" data-copy-button disabled>
-        Copy
-      </button>
-    </div>
-
     <label class="field">
       <span class="field-label">Title</span>
-      <input
-        class="live-input"
-        data-title-input
-        type="text"
-        name="title"
-        placeholder="type title here"
-        autocomplete="off"
-        spellcheck="false"
-      />
+      <span class="input-shell">
+        <input
+          class="live-input"
+          data-title-input
+          type="text"
+          name="title"
+          placeholder="Start typing a title..."
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <button class="copy-button" type="button" data-copy-button disabled>
+          Copy
+        </button>
+      </span>
     </label>
+
+    <div class="status-row">
+      <p class="helper-text" data-guide-helper>
+        Selected guide shaping title live.
+      </p>
+      <p class="status-text" data-copy-status>Waiting for input</p>
+    </div>
 
     <div class="control-stack">
       <div class="control-group">
@@ -93,13 +91,6 @@ import {
         </div>
       </div>
     </div>
-
-    <div class="status-row">
-      <p class="helper-text" data-guide-helper>
-        Title case mode uses selected guide. Other modes ignore guide rules.
-      </p>
-      <p class="status-text" data-copy-status>Waiting for input</p>
-    </div>
   </div>
 </section>
 
@@ -109,7 +100,7 @@ import {
     DEFAULT_STYLE_GUIDE,
     isCapitalizationMode,
     isStyleGuide,
-    transformTitle
+    transformTitle,
   } from "../lib/capitalize";
 
   const root = document.querySelector("[data-capitalizer-app]");
