@@ -28,7 +28,7 @@ Logic also lives in one place, so UI and transform rules stay in sync instead of
 - **Chicago**
 - **AP**
 - **AMA**
-- **Priority terms** — preserves branded and canonical casing like `ChatGPT`, `GitHub`, `iPhone`, `OpenAI`, and `Next.js`
+- **Priority terms** — preserves branded and canonical casing like `ChatGPT`, `GitHub`, `iPhone`, and `OpenAI`
 - **Custom preserved terms** — transform functions support caller-provided terms for project-specific casing
 - **Phrasal verb handling** — title case rules account for verb particles like `Log In` and `Sign Up`
 

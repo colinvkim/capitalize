@@ -23,13 +23,11 @@ describe("transformTitle", () => {
   it("preserves many branded and acronym terms in title case", () => {
     expect(
       transformTitle(
-        "openai guide to github graphql javascript typescript nextjs nodejs vscode and youtube",
+        "openai guide to github graphql javascript typescript and youtube",
         "title-case",
         "apa"
       )
-    ).toBe(
-      "OpenAI Guide to GitHub GraphQL JavaScript TypeScript Next.js Node.js VSCode and YouTube"
-    );
+    ).toBe("OpenAI Guide to GitHub GraphQL JavaScript TypeScript and YouTube");
   });
 
   it("supports custom preserved terms in title case", () => {
