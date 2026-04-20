@@ -14,6 +14,12 @@ describe("transformTitle", () => {
     ).toBe("AI Tools for iPhone and iPad at McDonald's");
   });
 
+  it("forces canonical priority-word casing in title case", () => {
+    expect(
+      transformTitle("chatgpt guide for iphone and gITHUB", "title-case", "apa")
+    ).toBe("ChatGPT Guide for iPhone and GitHub");
+  });
+
   it("preserves many branded and acronym terms in title case", () => {
     expect(
       transformTitle(
@@ -65,16 +71,22 @@ describe("transformTitle", () => {
     ).toBe("iPhone tips for COVID-19 tracking");
   });
 
+  it("forces canonical priority-word casing in sentence case", () => {
+    expect(
+      transformTitle("cHATgpt tips for iPHONE and gItHuB", "sentence-case", "mla")
+    ).toBe("ChatGPT tips for iPhone and GitHub");
+  });
+
   it("preserves custom capitalization in sentence case", () => {
     expect(
       transformTitle("mac tips from nasa and mcdonald's", "sentence-case", "mla")
     ).toBe("Mac tips from NASA and McDonald's");
   });
 
-  it("infers mc surnames and preserves typed mixed-case names", () => {
-    expect(
-      transformTitle("mcdonald met dimarillo and DiMarillo", "sentence-case", "mla")
-    ).toBe("McDonald met dimarillo and DiMarillo");
+  it("infers mc surnames and normalizes non-priority mixed-case words", () => {
+    expect(transformTitle("mcdonald met TISsue and DiMarillo", "sentence-case", "mla")).toBe(
+      "McDonald met tissue and dimarillo"
+    );
   });
 
   it("supports custom preserved terms in sentence case", () => {
@@ -120,6 +132,12 @@ describe("transformTitle", () => {
     expect(
       transformTitle("ai tools for iphone ipad mac and nasa", "first-letter-case", "ap")
     ).toBe("AI Tools For iPhone iPad Mac And NASA");
+  });
+
+  it("forces canonical priority-word casing in first letter case", () => {
+    expect(
+      transformTitle("cHATgpt tool for iPHONE and tISsue", "first-letter-case", "ap")
+    ).toBe("ChatGPT Tool For iPhone And Tissue");
   });
 
   it("preserves many branded terms in first letter case", () => {
