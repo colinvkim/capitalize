@@ -57,6 +57,12 @@ describe("transformTitle", () => {
     ).toBe("JBL Flip 5's Effect on the US Economy");
   });
 
+  it("does not preserve all-caps small words in title case", () => {
+    expect(
+      transformTitle("tHE jOe biden IN THE house", "title-case", "apa")
+    ).toBe("The Joe Biden in the House");
+  });
+
   it("applies sentence case across punctuation", () => {
     expect(
       transformTitle("THIS IS BIG. HERE IS ANOTHER LINE!", "sentence-case", "mla")

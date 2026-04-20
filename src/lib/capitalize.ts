@@ -398,7 +398,14 @@ function preserveTerm(
     return preservedTerm;
   }
 
-  if (allowGenericUppercase && /^[A-Z0-9]{2,5}$/u.test(word)) {
+  if (
+    allowGenericUppercase &&
+    /^[A-Z0-9]{2,5}$/u.test(word) &&
+    !ARTICLES.has(normalizeLookupKey(word)) &&
+    !COORDINATING_CONJUNCTIONS.has(normalizeLookupKey(word)) &&
+    !PREPOSITIONS.has(normalizeLookupKey(word)) &&
+    !SHORT_CONJUNCTIONS.has(normalizeLookupKey(word))
+  ) {
     return word;
   }
 
