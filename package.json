@@ -16,5 +16,8 @@
     "astro": "6.1.8",
     "typescript": "5.9.3",
     "vitest": "4.1.4"
+  },
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
   }
 }
