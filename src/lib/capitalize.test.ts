@@ -5,7 +5,7 @@ describe("transformTitle", () => {
   it("applies title case with guide-aware small words", () => {
     expect(
       transformTitle("a tale of two cities in the age of ai", "title-case", "apa")
-    ).toBe("A Tale of Two Cities in the Age of Ai");
+    ).toBe("A Tale of Two Cities in the Age of AI");
   });
 
   it("supports ama title casing", () => {
@@ -24,6 +24,30 @@ describe("transformTitle", () => {
     expect(
       transformTitle("THIS IS BIG. HERE IS ANOTHER LINE!", "sentence-case", "mla")
     ).toBe("This is big. Here is another line!");
+  });
+
+  it("preserves common acronyms in sentence case", () => {
+    expect(transformTitle("NASA launched a new AI tool", "sentence-case", "mla")).toBe(
+      "NASA launched a new AI tool"
+    );
+  });
+
+  it("preserves mixed-case and uppercase branded terms in sentence case", () => {
+    expect(
+      transformTitle("iPhone tips for COVID-19 tracking", "sentence-case", "mla")
+    ).toBe("iPhone tips for COVID-19 tracking");
+  });
+
+  it("capitalizes phrasal verb particles in chicago title case", () => {
+    expect(transformTitle("how to log in and sign up", "title-case", "chicago")).toBe(
+      "How to Log In and Sign Up"
+    );
+  });
+
+  it("capitalizes long prepositions in AP title case", () => {
+    expect(transformTitle("a walk through history", "title-case", "ap")).toBe(
+      "A Walk Through History"
+    );
   });
 
   it("uppercases the entire title", () => {
