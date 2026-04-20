@@ -50,9 +50,7 @@ input {
 }
 
 .eyebrow,
-.panel-label,
-.helper-text,
-.status-text {
+.panel-label {
   margin: 0;
   font-size: 0.78rem;
   letter-spacing: 0.08em;
@@ -89,8 +87,7 @@ input {
   box-shadow: var(--shadow);
 }
 
-.group-heading,
-.status-row {
+.group-heading {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -148,7 +145,7 @@ input {
 .control-stack {
   display: grid;
   gap: 1.25rem;
-  margin-top: 1.4rem;
+  margin-top: 1.1rem;
 }
 
 .option-grid {
@@ -221,21 +218,6 @@ input {
   cursor: not-allowed;
 }
 
-.status-row {
-  margin-top: 1.25rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--border);
-}
-
-.helper-text {
-  max-width: 26rem;
-  line-height: 1.55;
-}
-
-.status-text {
-  text-align: right;
-}
-
 @media (max-width: 720px) {
   .page-shell {
     width: min(100% - 1rem, 40rem);
@@ -247,8 +229,7 @@ input {
     border-radius: 1.25rem;
   }
 
-  .group-heading,
-  .status-row {
+  .group-heading {
     display: grid;
   }
 
@@ -269,9 +250,5 @@ input {
 
   .live-input {
     padding-right: 1.1rem;
-  }
-
-  .status-text {
-    text-align: left;
   }
 }

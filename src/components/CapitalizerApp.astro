@@ -33,13 +33,6 @@ import {
       </span>
     </label>
 
-    <div class="status-row">
-      <p class="helper-text" data-guide-helper>
-        Selected guide shaping title live.
-      </p>
-      <p class="status-text" data-copy-status>Waiting for input</p>
-    </div>
-
     <div class="control-stack">
       <div class="control-group">
         <div class="group-heading">
@@ -111,15 +104,8 @@ import {
 
   const titleInput = root.querySelector("[data-title-input]");
   const copyButton = root.querySelector("[data-copy-button]");
-  const guideHelper = root.querySelector("[data-guide-helper]");
-  const copyStatus = root.querySelector("[data-copy-status]");
 
-  if (
-    !(titleInput instanceof HTMLInputElement) ||
-    !(copyButton instanceof HTMLButtonElement) ||
-    !(guideHelper instanceof HTMLParagraphElement) ||
-    !(copyStatus instanceof HTMLElement)
-  ) {
+  if (!(titleInput instanceof HTMLInputElement) || !(copyButton instanceof HTMLButtonElement)) {
     throw new Error("Capitalizer UI is missing required elements.");
   }
 
@@ -159,13 +145,9 @@ import {
     }
 
     copyButton.disabled = !hasValue;
-    guideHelper.textContent =
-      mode === "title-case"
-        ? "Selected guide shaping title live."
-        : "Guide idle until you switch back to Title Case.";
 
     if (!hasValue) {
-      copyStatus.textContent = "Waiting for input";
+      copyButton.textContent = "Copy";
     }
   };
 
@@ -189,14 +171,12 @@ import {
     try {
       await navigator.clipboard.writeText(titleInput.value);
       copyButton.textContent = "Copied";
-      copyStatus.textContent = "Copied to clipboard";
       window.clearTimeout(copyResetHandle);
       copyResetHandle = window.setTimeout(() => {
         copyButton.textContent = "Copy";
-        copyStatus.textContent = "Ready to copy again";
       }, 1800);
     } catch {
-      copyStatus.textContent = "Clipboard access failed";
+      copyButton.textContent = "Retry";
     }
   });
 
