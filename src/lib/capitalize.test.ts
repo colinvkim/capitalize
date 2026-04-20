@@ -30,15 +30,6 @@ describe("transformTitle", () => {
     ).toBe("OpenAI Guide to GitHub GraphQL JavaScript TypeScript and YouTube");
   });
 
-  it("supports custom preserved terms in title case", () => {
-    expect(
-      transformTitle("notes about openclaw and dimarillo", "title-case", "apa", [
-        "OpenClaw",
-        "DiMarillo"
-      ])
-    ).toBe("Notes About OpenClaw and DiMarillo");
-  });
-
   it("supports ama title casing", () => {
     expect(
       transformTitle("finding care for children with asthma", "title-case", "ama")
@@ -99,15 +90,6 @@ describe("transformTitle", () => {
     );
   });
 
-  it("supports custom preserved terms in sentence case", () => {
-    expect(
-      transformTitle("openclaw shipped with dimarillo", "sentence-case", "mla", [
-        "OpenClaw",
-        "DiMarillo"
-      ])
-    ).toBe("OpenClaw shipped with DiMarillo");
-  });
-
   it("capitalizes phrasal verb particles in chicago title case", () => {
     expect(transformTitle("how to log in and sign up", "title-case", "chicago")).toBe(
       "How to Log In and Sign Up"
@@ -160,15 +142,6 @@ describe("transformTitle", () => {
     ).toBe(
       "OpenAI GitHub GraphQL JavaScript TypeScript macOS iOS eBay PayPal WordPress WhatsApp"
     );
-  });
-
-  it("supports custom preserved terms in first letter case", () => {
-    expect(
-      transformTitle("openclaw dimarillo mcdonald", "first-letter-case", "ap", [
-        "OpenClaw",
-        "DiMarillo"
-      ])
-    ).toBe("OpenClaw DiMarillo McDonald");
   });
 
   it("creates alternating case", () => {

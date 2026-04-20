@@ -199,26 +199,23 @@ const WORD_TOKEN_RE = /^([^A-Za-z0-9]*)([A-Za-z0-9]+(?:[’'][A-Za-z0-9]+)*(?:-[
 export function transformTitle(
   input: string,
   mode: CapitalizationMode,
-  guide: StyleGuide,
-  customTerms: Iterable<string> = []
+  guide: StyleGuide
 ): string {
   if (!input.trim()) {
     return "";
   }
 
-  const preservedTerms = buildPreservedTerms(customTerms);
-
   switch (mode) {
     case "title-case":
-      return applyTitleCase(input, guide, preservedTerms);
+      return applyTitleCase(input, guide, PRIORITY_TERMS);
     case "sentence-case":
-      return applySentenceCase(input, preservedTerms);
+      return applySentenceCase(input, PRIORITY_TERMS);
     case "uppercase":
       return input.toUpperCase();
     case "lowercase":
       return input.toLowerCase();
     case "first-letter-case":
-      return applyFirstLetterCase(input, preservedTerms);
+      return applyFirstLetterCase(input, PRIORITY_TERMS);
     case "alternating-case":
       return applyAlternatingCase(input);
     default:
@@ -473,22 +470,6 @@ function normalizeCompoundWord(
 
 function normalizeLookupKey(word: string): string {
   return word.toLowerCase().replaceAll("’", "'");
-}
-
-function buildPreservedTerms(customTerms: Iterable<string>): Map<string, string> {
-  const preservedTerms = new Map(PRIORITY_TERMS);
-
-  for (const term of customTerms) {
-    const normalizedTerm = term.trim();
-
-    if (!normalizedTerm) {
-      continue;
-    }
-
-    preservedTerms.set(normalizeLookupKey(normalizedTerm), normalizedTerm);
-  }
-
-  return preservedTerms;
 }
 
 function normalizeWord(
