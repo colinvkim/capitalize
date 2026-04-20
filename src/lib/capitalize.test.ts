@@ -8,6 +8,12 @@ describe("transformTitle", () => {
     ).toBe("A Tale of Two Cities in the Age of AI");
   });
 
+  it("preserves custom capitalization in title case", () => {
+    expect(
+      transformTitle("ai tools for iphone and ipad at mcdonald's", "title-case", "apa")
+    ).toBe("AI Tools for iPhone and iPad at McDonald's");
+  });
+
   it("supports ama title casing", () => {
     expect(
       transformTitle("finding care for children with asthma", "title-case", "ama")
@@ -38,6 +44,12 @@ describe("transformTitle", () => {
     ).toBe("iPhone tips for COVID-19 tracking");
   });
 
+  it("preserves custom capitalization in sentence case", () => {
+    expect(
+      transformTitle("mac tips from nasa and mcdonald's", "sentence-case", "mla")
+    ).toBe("Mac tips from NASA and McDonald's");
+  });
+
   it("capitalizes phrasal verb particles in chicago title case", () => {
     expect(transformTitle("how to log in and sign up", "title-case", "chicago")).toBe(
       "How to Log In and Sign Up"
@@ -66,6 +78,12 @@ describe("transformTitle", () => {
     expect(
       transformTitle("mixed-case input for every word", "first-letter-case", "ap")
     ).toBe("Mixed-Case Input For Every Word");
+  });
+
+  it("preserves custom capitalization in first letter case", () => {
+    expect(
+      transformTitle("ai tools for iphone ipad mac and nasa", "first-letter-case", "ap")
+    ).toBe("AI Tools For iPhone iPad Mac And NASA");
   });
 
   it("creates alternating case", () => {

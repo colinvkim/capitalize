@@ -190,7 +190,7 @@ const PHRASAL_VERB_PARTICLES = new Map<string, Set<string>>([
   ["work", new Set(["in", "off", "out", "over", "through", "up"])],
   ["write", new Set(["down", "off", "out", "up"])]
 ]);
-const KNOWN_ACRONYMS = new Map<string, string>([
+const PRESERVED_TERMS = new Map<string, string>([
   ["ai", "AI"],
   ["ama", "AMA"],
   ["api", "API"],
@@ -203,10 +203,15 @@ const KNOWN_ACRONYMS = new Map<string, string>([
   ["html", "HTML"],
   ["http", "HTTP"],
   ["https", "HTTPS"],
+  ["ipad", "iPad"],
+  ["iphone", "iPhone"],
   ["id", "ID"],
   ["ip", "IP"],
   ["js", "JS"],
   ["json", "JSON"],
+  ["mac", "Mac"],
+  ["mcdonald's", "McDonald's"],
+  ["mcdonald’s", "McDonald's"],
   ["mla", "MLA"],
   ["nasa", "NASA"],
   ["pdf", "PDF"],
@@ -342,7 +347,7 @@ function applySentenceCase(input: string): string {
 
 function applyFirstLetterCase(input: string): string {
   return input.replace(/[A-Za-z0-9]+(?:[’'][A-Za-z0-9]+)*/gu, (word) =>
-    capitalizeWord(word)
+    preserveTerm(word, true) ?? capitalizeWord(word)
   );
 }
 
@@ -370,7 +375,7 @@ function capitalizeCompound(input: string): string {
         return part;
       }
 
-      return preserveExactCase(part) ?? preserveAcronym(part, true) ?? capitalizeWord(part);
+      return preserveExactCase(part) ?? preserveTerm(part, true) ?? capitalizeWord(part);
     })
     .join("");
 }
@@ -394,11 +399,11 @@ function capitalizeWord(word: string): string {
   return characters.join("");
 }
 
-function preserveAcronym(word: string, allowGenericUppercase: boolean): string | null {
-  const knownAcronym = KNOWN_ACRONYMS.get(word.toLowerCase());
+function preserveTerm(word: string, allowGenericUppercase: boolean): string | null {
+  const preservedTerm = PRESERVED_TERMS.get(normalizeLookupKey(word));
 
-  if (knownAcronym) {
-    return knownAcronym;
+  if (preservedTerm) {
+    return preservedTerm;
   }
 
   if (allowGenericUppercase && /^[A-Z0-9]{2,5}$/u.test(word)) {
@@ -465,8 +470,7 @@ function normalizeCompoundWord(
         return part;
       }
 
-      const preserved =
-        preserveExactCase(part) ?? preserveAcronym(part, allowGenericUppercase);
+      const preserved = preserveExactCase(part) ?? preserveTerm(part, allowGenericUppercase);
       if (preserved) {
         return preserved;
       }
@@ -485,6 +489,10 @@ function preserveExactCase(word: string): string | null {
   }
 
   return null;
+}
+
+function normalizeLookupKey(word: string): string {
+  return word.toLowerCase().replaceAll("’", "'");
 }
 
 function isLetter(character: string): boolean {
