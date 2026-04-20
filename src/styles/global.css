@@ -16,7 +16,6 @@
 
 * {
   box-sizing: border-box;
-  font-family: var(--font-sans);
 }
 
 html,
@@ -25,7 +24,12 @@ body {
   min-height: 100%;
 }
 
+html {
+  font-family: var(--font-sans);
+}
+
 body {
+  font-family: inherit;
   color: var(--text);
   background:
     radial-gradient(circle at top, rgba(255, 255, 255, 0.85), transparent 34%),
@@ -33,8 +37,11 @@ body {
 }
 
 button,
-input {
+input,
+select,
+textarea {
   font: inherit;
+  font-family: inherit;
 }
 
 .page-shell {
