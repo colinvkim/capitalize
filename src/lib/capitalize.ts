@@ -240,10 +240,22 @@ function applyTitleCase(
   preservedTerms: Map<string, string>
 ): string {
   const tokens = input.match(/\s+|[^\s]+/g) ?? [];
-  const wordIndexes = tokens.flatMap((token, index) => (getWordCore(token) ? [index] : []));
-  const lastWordIndex = wordIndexes.at(-1);
+  let firstWordIndex = -1;
+  let lastWordIndex = -1;
   let previousEndedClause = true;
   let previousWordCore: string | null = null;
+
+  for (const [index, token] of tokens.entries()) {
+    if (!getWordCore(token)) {
+      continue;
+    }
+
+    if (firstWordIndex === -1) {
+      firstWordIndex = index;
+    }
+
+    lastWordIndex = index;
+  }
 
   return tokens
     .map((token, index) => {
@@ -267,7 +279,7 @@ function applyTitleCase(
       const lowercaseCore = core.toLowerCase();
       const prioritizedCore = preserveTerm(core, true, preservedTerms);
       const shouldForceCapitalize =
-        index === wordIndexes[0] || index === lastWordIndex || previousEndedClause;
+        index === firstWordIndex || index === lastWordIndex || previousEndedClause;
 
       previousEndedClause = /[:.!?]$/.test(`${core}${suffix}`.trim());
 
@@ -313,9 +325,7 @@ function applySentenceCase(input: string, preservedTerms: Map<string, string>): 
         return token;
       }
 
-      const normalizedCore = shouldCapitalize
-        ? capitalizeSentenceWord(core, preservedTerms)
-        : normalizeSentenceWord(core, preservedTerms);
+      const normalizedCore = normalizeCompoundWord(core, shouldCapitalize, false, preservedTerms);
 
       shouldCapitalize = false;
       if (/[.!?]["')\]]*$/.test(`${core}${suffix}`.trim())) {
@@ -329,11 +339,7 @@ function applySentenceCase(input: string, preservedTerms: Map<string, string>): 
 
 function applyFirstLetterCase(input: string, preservedTerms: Map<string, string>): string {
   return input.replace(/[A-Za-z0-9]+(?:[’'][A-Za-z0-9]+)*/gu, (word) =>
-    normalizeWord(word, {
-      capitalizeFirstWord: true,
-      allowGenericUppercase: true,
-      preservedTerms
-    })
+    normalizeCompoundWord(word, true, true, preservedTerms)
   );
 }
 
@@ -354,22 +360,7 @@ function applyAlternatingCase(input: string): string {
 }
 
 function capitalizeCompound(input: string, preservedTerms: Map<string, string>): string {
-  return input
-    .split(/(-)/)
-    .map((part) => {
-      if (part === "-") {
-        return part;
-      }
-
-      return (
-        normalizeWord(part, {
-          capitalizeFirstWord: true,
-          allowGenericUppercase: true,
-          preservedTerms
-        })
-      );
-    })
-    .join("");
+  return normalizeCompoundWord(input, true, true, preservedTerms);
 }
 
 function capitalizeWord(word: string): string {
@@ -444,14 +435,6 @@ function isPhrasalParticle(word: string, previousWordCore: string | null): boole
   }
 
   return PHRASAL_VERB_PARTICLES.get(previousWordCore)?.has(word) ?? false;
-}
-
-function normalizeSentenceWord(word: string, preservedTerms: Map<string, string>): string {
-  return normalizeCompoundWord(word, false, false, preservedTerms);
-}
-
-function capitalizeSentenceWord(word: string, preservedTerms: Map<string, string>): string {
-  return normalizeCompoundWord(word, true, false, preservedTerms);
 }
 
 function normalizeCompoundWord(
