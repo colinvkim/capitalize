@@ -51,6 +51,12 @@ describe("transformTitle", () => {
     ).toBe("Learning Design: A Guide for Teams");
   });
 
+  it("keeps numeric possessives lowercase in title case", () => {
+    expect(
+      transformTitle("jbl flip 5's effect on the us economy", "title-case", "apa")
+    ).toBe("JBL Flip 5's Effect on the US Economy");
+  });
+
   it("applies sentence case across punctuation", () => {
     expect(
       transformTitle("THIS IS BIG. HERE IS ANOTHER LINE!", "sentence-case", "mla")

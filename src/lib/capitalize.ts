@@ -365,6 +365,11 @@ function capitalizeCompound(input: string, preservedTerms: Map<string, string>):
 
 function capitalizeWord(word: string): string {
   const lowercased = word.toLowerCase();
+
+  if (/^\d+[’'][a-z]+$/u.test(lowercased)) {
+    return lowercased;
+  }
+
   const index = Array.from(lowercased).findIndex((character) => isLetter(character));
 
   if (index === -1) {
