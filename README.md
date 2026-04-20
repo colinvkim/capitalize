@@ -4,7 +4,6 @@ A fast, one-page Astro app for fixing title capitalization as you type. Pick a m
 
 ![Astro](https://img.shields.io/badge/Astro%206-FF5D01?logo=astro&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
-![Vitest](https://img.shields.io/badge/Vitest-6E9F18?logo=vitest&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey)
 
 ## Why capitalize?
@@ -13,16 +12,7 @@ Most capitalization tools make you paste text into one field, click button, then
 
 Logic also lives in one place, so UI and transform rules stay in sync instead of drifting across separate components.
 
-## Features
-
-### Live Editing
-
-- **Single live input** — type directly into field that gets transformed in real time
-- **Caret preservation** — selection and cursor stay stable while input value updates itself
-- **One-click copy** — copy latest result without leaving keyboard flow
-- **Mobile-friendly layout** — controls stack cleanly on smaller screens
-
-### Capitalization Modes
+## Capitalization Modes
 
 - **Title Case** — guide-aware title capitalization
 - **Sentence case** — capitalize opening sentence and normalize rest
@@ -31,7 +21,7 @@ Logic also lives in one place, so UI and transform rules stay in sync instead of
 - **First Letter Case** — capitalize each word
 - **HeLlO wOrLd** — alternating case for playful output
 
-### Style-Guide Rules
+## Style-Guide Rules
 
 - **APA**
 - **MLA**
@@ -117,14 +107,9 @@ capitalize/
 - **Client script handles live mutation** of same input field, copy feedback, and radio-driven rerenders
 - **Vitest coverage** checks guide-specific title casing, branded terms, custom preserved terms, punctuation behavior, and alternate modes
 
-## Contributing
+## Canonical Casing
 
-Keep changes small and focused.
-
-- Put capitalization behavior in `src/lib/capitalize.ts`
-- Reuse shared mode and style-guide option arrays so UI stays in sync
-- Preserve caret and selection behavior when touching live input updates
-- Run `pnpm check` and `pnpm test` before opening PR
+Some terms use canonical casing that cannot be inferred automatically (for example, `iPhone` and `ChatGPT`). Add those terms to `src/lib/priority-terms.json` so transforms preserve the correct capitalization. If you find a missing term, feel free to open a PR with the addition.
 
 ## License
 
