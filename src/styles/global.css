@@ -26,7 +26,6 @@ body {
 }
 
 body {
-  font-family: var(--font-sans);
   color: var(--text);
   background:
     radial-gradient(circle at top, rgba(255, 255, 255, 0.85), transparent 34%),
