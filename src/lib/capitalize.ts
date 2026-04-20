@@ -191,39 +191,150 @@ const PHRASAL_VERB_PARTICLES = new Map<string, Set<string>>([
   ["write", new Set(["down", "off", "out", "up"])]
 ]);
 const PRESERVED_TERMS = new Map<string, string>([
+  ["adwords", "AdWords"],
   ["ai", "AI"],
+  ["airbnb", "Airbnb"],
   ["ama", "AMA"],
+  ["android", "Android"],
   ["api", "API"],
+  ["aws", "AWS"],
+  ["bbc", "BBC"],
+  ["bitly", "Bitly"],
+  ["chatgpt", "ChatGPT"],
+  ["cli", "CLI"],
+  ["cms", "CMS"],
   ["cpu", "CPU"],
-  ["css", "CSS"],
   ["covid", "COVID"],
+  ["css", "CSS"],
+  ["csv", "CSV"],
+  ["db", "DB"],
+  ["devops", "DevOps"],
   ["dna", "DNA"],
+  ["dns", "DNS"],
+  ["dockerhub", "DockerHub"],
+  ["dropbox", "Dropbox"],
+  ["ebay", "eBay"],
+  ["ebook", "eBook"],
+  ["ebooks", "eBooks"],
+  ["ecommerce", "eCommerce"],
   ["eu", "EU"],
   ["faq", "FAQ"],
+  ["fedex", "FedEx"],
+  ["firebase", "Firebase"],
+  ["github", "GitHub"],
+  ["gitlab", "GitLab"],
+  ["gmail", "Gmail"],
+  ["gofundme", "GoFundMe"],
+  ["gopro", "GoPro"],
+  ["gpt", "GPT"],
+  ["gpu", "GPU"],
+  ["graphql", "GraphQL"],
   ["html", "HTML"],
   ["http", "HTTP"],
   ["https", "HTTPS"],
+  ["icloud", "iCloud"],
   ["ipad", "iPad"],
+  ["ipados", "iPadOS"],
+  ["imac", "iMac"],
+  ["imdb", "IMDb"],
+  ["imessage", "iMessage"],
   ["iphone", "iPhone"],
   ["id", "ID"],
   ["ip", "IP"],
+  ["ios", "iOS"],
+  ["ipod", "iPod"],
+  ["itunes", "iTunes"],
+  ["javascript", "JavaScript"],
   ["js", "JS"],
+  ["jsx", "JSX"],
   ["json", "JSON"],
+  ["jwt", "JWT"],
+  ["kpi", "KPI"],
+  ["latex", "LaTeX"],
+  ["linkedin", "LinkedIn"],
+  ["llm", "LLM"],
   ["mac", "Mac"],
+  ["macbook", "MacBook"],
+  ["macbookair", "MacBookAir"],
+  ["macbookpro", "MacBookPro"],
+  ["macos", "macOS"],
+  ["mcafee", "McAfee"],
   ["mcdonald's", "McDonald's"],
   ["mcdonald’s", "McDonald's"],
+  ["messenger", "Messenger"],
+  ["mfa", "MFA"],
+  ["ml", "ML"],
   ["mla", "MLA"],
+  ["mongodb", "MongoDB"],
   ["nasa", "NASA"],
+  ["netflix", "Netflix"],
+  ["nextjs", "Next.js"],
+  ["nlp", "NLP"],
+  ["nodejs", "Node.js"],
+  ["nosql", "NoSQL"],
+  ["oauth", "OAuth"],
+  ["openai", "OpenAI"],
+  ["opengl", "OpenGL"],
+  ["oreilly", "O'Reilly"],
+  ["o'reilly", "O'Reilly"],
   ["pdf", "PDF"],
+  ["paypal", "PayPal"],
+  ["php", "PHP"],
+  ["playstation", "PlayStation"],
+  ["postgres", "Postgres"],
+  ["postgresql", "PostgreSQL"],
+  ["powerpoint", "PowerPoint"],
+  ["pr", "PR"],
+  ["pwa", "PWA"],
+  ["qa", "QA"],
+  ["qrcode", "QRCode"],
+  ["qr", "QR"],
+  ["quicktime", "QuickTime"],
+  ["reactjs", "React.js"],
+  ["rest", "REST"],
   ["rna", "RNA"],
+  ["saas", "SaaS"],
+  ["sdk", "SDK"],
+  ["seo", "SEO"],
+  ["slack", "Slack"],
+  ["sms", "SMS"],
+  ["soundcloud", "SoundCloud"],
   ["sql", "SQL"],
+  ["sso", "SSO"],
+  ["ssh", "SSH"],
+  ["ssl", "SSL"],
+  ["stackoverflow", "StackOverflow"],
+  ["svg", "SVG"],
+  ["tiktok", "TikTok"],
+  ["tls", "TLS"],
+  ["typescript", "TypeScript"],
   ["tv", "TV"],
   ["ui", "UI"],
   ["uk", "UK"],
   ["url", "URL"],
   ["us", "US"],
+  ["usb", "USB"],
   ["usa", "USA"],
-  ["ux", "UX"]
+  ["utf", "UTF"],
+  ["ux", "UX"],
+  ["vercel", "Vercel"],
+  ["vimeo", "Vimeo"],
+  ["vpn", "VPN"],
+  ["vscode", "VSCode"],
+  ["webgl", "WebGL"],
+  ["webgpu", "WebGPU"],
+  ["whatsapp", "WhatsApp"],
+  ["woocommerce", "WooCommerce"],
+  ["wordpress", "WordPress"],
+  ["xbox", "Xbox"],
+  ["xcode", "Xcode"],
+  ["xml", "XML"],
+  ["yaml", "YAML"],
+  ["youtube", "YouTube"],
+  ["zapier", "Zapier"],
+  ["zendesk", "Zendesk"],
+  ["zoom", "Zoom"],
+  ["zsh", "zsh"]
 ]);
 
 const WORD_TOKEN_RE = /^([^A-Za-z0-9]*)([A-Za-z0-9]+(?:[’'][A-Za-z0-9]+)*(?:-[A-Za-z0-9]+(?:[’'][A-Za-z0-9]+)*)*)([^A-Za-z0-9]*)$/u;
@@ -231,23 +342,26 @@ const WORD_TOKEN_RE = /^([^A-Za-z0-9]*)([A-Za-z0-9]+(?:[’'][A-Za-z0-9]+)*(?:-[
 export function transformTitle(
   input: string,
   mode: CapitalizationMode,
-  guide: StyleGuide
+  guide: StyleGuide,
+  customTerms: Iterable<string> = []
 ): string {
   if (!input.trim()) {
     return "";
   }
 
+  const preservedTerms = buildPreservedTerms(customTerms);
+
   switch (mode) {
     case "title-case":
-      return applyTitleCase(input, guide);
+      return applyTitleCase(input, guide, preservedTerms);
     case "sentence-case":
-      return applySentenceCase(input);
+      return applySentenceCase(input, preservedTerms);
     case "uppercase":
       return input.toUpperCase();
     case "lowercase":
       return input.toLowerCase();
     case "first-letter-case":
-      return applyFirstLetterCase(input);
+      return applyFirstLetterCase(input, preservedTerms);
     case "alternating-case":
       return applyAlternatingCase(input);
     default:
@@ -263,7 +377,11 @@ export function isStyleGuide(value: string): value is StyleGuide {
   return STYLE_GUIDE_VALUES.has(value as StyleGuide);
 }
 
-function applyTitleCase(input: string, guide: StyleGuide): string {
+function applyTitleCase(
+  input: string,
+  guide: StyleGuide,
+  preservedTerms: Map<string, string>
+): string {
   const tokens = input.match(/\s+|[^\s]+/g) ?? [];
   const wordIndexes = tokens.flatMap((token, index) => (getWordCore(token) ? [index] : []));
   const lastWordIndex = wordIndexes.at(-1);
@@ -303,12 +421,12 @@ function applyTitleCase(input: string, guide: StyleGuide): string {
         return `${prefix}${lowercaseCore}${suffix}`;
       }
 
-      return `${prefix}${capitalizeCompound(core)}${suffix}`;
+      return `${prefix}${capitalizeCompound(core, preservedTerms)}${suffix}`;
     })
     .join("");
 }
 
-function applySentenceCase(input: string): string {
+function applySentenceCase(input: string, preservedTerms: Map<string, string>): string {
   const tokens = input.match(/\s+|[^\s]+/g) ?? [];
   let shouldCapitalize = true;
 
@@ -332,8 +450,8 @@ function applySentenceCase(input: string): string {
       }
 
       const normalizedCore = shouldCapitalize
-        ? capitalizeSentenceWord(core)
-        : normalizeSentenceWord(core);
+        ? capitalizeSentenceWord(core, preservedTerms)
+        : normalizeSentenceWord(core, preservedTerms);
 
       shouldCapitalize = false;
       if (/[.!?]["')\]]*$/.test(`${core}${suffix}`.trim())) {
@@ -345,9 +463,11 @@ function applySentenceCase(input: string): string {
     .join("");
 }
 
-function applyFirstLetterCase(input: string): string {
+function applyFirstLetterCase(input: string, preservedTerms: Map<string, string>): string {
   return input.replace(/[A-Za-z0-9]+(?:[’'][A-Za-z0-9]+)*/gu, (word) =>
-    preserveTerm(word, true) ?? capitalizeWord(word)
+    preserveTerm(word, true, preservedTerms) ??
+      inferStructuredCapitalization(word) ??
+      capitalizeWord(word)
   );
 }
 
@@ -367,7 +487,7 @@ function applyAlternatingCase(input: string): string {
     .join("");
 }
 
-function capitalizeCompound(input: string): string {
+function capitalizeCompound(input: string, preservedTerms: Map<string, string>): string {
   return input
     .split(/(-)/)
     .map((part) => {
@@ -375,7 +495,12 @@ function capitalizeCompound(input: string): string {
         return part;
       }
 
-      return preserveExactCase(part) ?? preserveTerm(part, true) ?? capitalizeWord(part);
+      return (
+        preserveExactCase(part) ??
+        preserveTerm(part, true, preservedTerms) ??
+        inferStructuredCapitalization(part) ??
+        capitalizeWord(part)
+      );
     })
     .join("");
 }
@@ -399,8 +524,12 @@ function capitalizeWord(word: string): string {
   return characters.join("");
 }
 
-function preserveTerm(word: string, allowGenericUppercase: boolean): string | null {
-  const preservedTerm = PRESERVED_TERMS.get(normalizeLookupKey(word));
+function preserveTerm(
+  word: string,
+  allowGenericUppercase: boolean,
+  preservedTerms: Map<string, string>
+): string | null {
+  const preservedTerm = preservedTerms.get(normalizeLookupKey(word));
 
   if (preservedTerm) {
     return preservedTerm;
@@ -450,18 +579,19 @@ function isPhrasalParticle(word: string, previousWordCore: string | null): boole
   return PHRASAL_VERB_PARTICLES.get(previousWordCore)?.has(word) ?? false;
 }
 
-function normalizeSentenceWord(word: string): string {
-  return normalizeCompoundWord(word, false, false);
+function normalizeSentenceWord(word: string, preservedTerms: Map<string, string>): string {
+  return normalizeCompoundWord(word, false, false, preservedTerms);
 }
 
-function capitalizeSentenceWord(word: string): string {
-  return normalizeCompoundWord(word, true, false);
+function capitalizeSentenceWord(word: string, preservedTerms: Map<string, string>): string {
+  return normalizeCompoundWord(word, true, false, preservedTerms);
 }
 
 function normalizeCompoundWord(
   word: string,
   capitalizeFirstWord: boolean,
-  allowGenericUppercase: boolean
+  allowGenericUppercase: boolean,
+  preservedTerms: Map<string, string>
 ): string {
   return word
     .split(/(-)/)
@@ -470,9 +600,15 @@ function normalizeCompoundWord(
         return part;
       }
 
-      const preserved = preserveExactCase(part) ?? preserveTerm(part, allowGenericUppercase);
+      const preserved =
+        preserveExactCase(part) ?? preserveTerm(part, allowGenericUppercase, preservedTerms);
       if (preserved) {
         return preserved;
+      }
+
+      const inferredCapitalization = inferStructuredCapitalization(part);
+      if (inferredCapitalization) {
+        return inferredCapitalization;
       }
 
       return capitalizeFirstWord ? capitalizeWord(part) : part.toLowerCase();
@@ -493,6 +629,40 @@ function preserveExactCase(word: string): string | null {
 
 function normalizeLookupKey(word: string): string {
   return word.toLowerCase().replaceAll("’", "'");
+}
+
+function buildPreservedTerms(customTerms: Iterable<string>): Map<string, string> {
+  const preservedTerms = new Map(PRESERVED_TERMS);
+
+  for (const term of customTerms) {
+    const normalizedTerm = term.trim();
+
+    if (!normalizedTerm) {
+      continue;
+    }
+
+    preservedTerms.set(normalizeLookupKey(normalizedTerm), normalizedTerm);
+  }
+
+  return preservedTerms;
+}
+
+function inferStructuredCapitalization(word: string): string | null {
+  const normalized = normalizeLookupKey(word);
+  const mcMatch = normalized.match(/^mc([a-z])([a-z]{2,})$/);
+
+  if (mcMatch) {
+    const first = mcMatch[1];
+    const rest = mcMatch[2];
+
+    if (!first || !rest) {
+      return null;
+    }
+
+    return `Mc${first.toUpperCase()}${rest}`;
+  }
+
+  return null;
 }
 
 function isLetter(character: string): boolean {

@@ -14,6 +14,27 @@ describe("transformTitle", () => {
     ).toBe("AI Tools for iPhone and iPad at McDonald's");
   });
 
+  it("preserves many branded and acronym terms in title case", () => {
+    expect(
+      transformTitle(
+        "openai guide to github graphql javascript typescript nextjs nodejs vscode and youtube",
+        "title-case",
+        "apa"
+      )
+    ).toBe(
+      "OpenAI Guide to GitHub GraphQL JavaScript TypeScript Next.js Node.js VSCode and YouTube"
+    );
+  });
+
+  it("supports custom preserved terms in title case", () => {
+    expect(
+      transformTitle("notes about openclaw and dimarillo", "title-case", "apa", [
+        "OpenClaw",
+        "DiMarillo"
+      ])
+    ).toBe("Notes About OpenClaw and DiMarillo");
+  });
+
   it("supports ama title casing", () => {
     expect(
       transformTitle("finding care for children with asthma", "title-case", "ama")
@@ -50,6 +71,21 @@ describe("transformTitle", () => {
     ).toBe("Mac tips from NASA and McDonald's");
   });
 
+  it("infers mc surnames and preserves typed mixed-case names", () => {
+    expect(
+      transformTitle("mcdonald met dimarillo and DiMarillo", "sentence-case", "mla")
+    ).toBe("McDonald met dimarillo and DiMarillo");
+  });
+
+  it("supports custom preserved terms in sentence case", () => {
+    expect(
+      transformTitle("openclaw shipped with dimarillo", "sentence-case", "mla", [
+        "OpenClaw",
+        "DiMarillo"
+      ])
+    ).toBe("OpenClaw shipped with DiMarillo");
+  });
+
   it("capitalizes phrasal verb particles in chicago title case", () => {
     expect(transformTitle("how to log in and sign up", "title-case", "chicago")).toBe(
       "How to Log In and Sign Up"
@@ -84,6 +120,27 @@ describe("transformTitle", () => {
     expect(
       transformTitle("ai tools for iphone ipad mac and nasa", "first-letter-case", "ap")
     ).toBe("AI Tools For iPhone iPad Mac And NASA");
+  });
+
+  it("preserves many branded terms in first letter case", () => {
+    expect(
+      transformTitle(
+        "openai github graphql javascript typescript macos ios ebay paypal wordpress whatsapp",
+        "first-letter-case",
+        "ap"
+      )
+    ).toBe(
+      "OpenAI GitHub GraphQL JavaScript TypeScript macOS iOS eBay PayPal WordPress WhatsApp"
+    );
+  });
+
+  it("supports custom preserved terms in first letter case", () => {
+    expect(
+      transformTitle("openclaw dimarillo mcdonald", "first-letter-case", "ap", [
+        "OpenClaw",
+        "DiMarillo"
+      ])
+    ).toBe("OpenClaw DiMarillo McDonald");
   });
 
   it("creates alternating case", () => {
