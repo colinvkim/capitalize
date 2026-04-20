@@ -16,6 +16,7 @@
 
 * {
   box-sizing: border-box;
+  font-family: var(--font-sans);
 }
 
 html,
@@ -131,15 +132,10 @@ input {
   transition: border-color 150ms ease, box-shadow 150ms ease;
 }
 
-.input-shell:has(.live-input:focus),
 .copy-button:focus-visible,
 .option-pill:has(input:focus-visible) {
   outline: none;
   box-shadow: 0 0 0 4px rgba(187, 90, 42, 0.16);
-}
-
-.input-shell:has(.live-input:focus) .live-input {
-  border-color: var(--accent);
 }
 
 .control-stack {
