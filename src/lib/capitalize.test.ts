@@ -102,6 +102,24 @@ describe("transformTitle", () => {
     );
   });
 
+  it("keeps small words lowercase inside hyphenated title-case compounds", () => {
+    expect(
+      transformTitle("state-of-the-art tools for up-to-date teams", "title-case", "apa")
+    ).toBe("State-of-the-Art Tools for Up-to-Date Teams");
+  });
+
+  it("capitalizes only first hyphen segment in sentence case", () => {
+    expect(transformTitle("SELF-DRIVING CARS ARE HERE", "sentence-case", "ap")).toBe(
+      "Self-driving cars are here"
+    );
+  });
+
+  it("supports accented letters in capitalization transforms", () => {
+    expect(transformTitle("élan vital for naïve users", "title-case", "apa")).toBe(
+      "Élan Vital for Naïve Users"
+    );
+  });
+
   it("uppercases the entire title", () => {
     expect(transformTitle("Hello, world 2026", "uppercase", "ap")).toBe(
       "HELLO, WORLD 2026"

@@ -194,7 +194,8 @@ const PHRASAL_VERB_PARTICLES = new Map<string, Set<string>>([
 ]);
 const PRIORITY_TERMS = new Map<string, string>(Object.entries(priorityTermsData));
 
-const WORD_TOKEN_RE = /^([^A-Za-z0-9]*)([A-Za-z0-9]+(?:[’'][A-Za-z0-9]+)*(?:-[A-Za-z0-9]+(?:[’'][A-Za-z0-9]+)*)*)([^A-Za-z0-9]*)$/u;
+const WORD_TOKEN_RE =
+  /^([^\p{L}\p{N}]*)([\p{L}\p{N}]+(?:[’'][\p{L}\p{N}]+)*(?:-[\p{L}\p{N}]+(?:[’'][\p{L}\p{N}]+)*)*)([^\p{L}\p{N}]*)$/u;
 
 export function transformTitle(
   input: string,
@@ -277,6 +278,7 @@ function applyTitleCase(
       const prioritizedCore = preserveTerm(core, true, preservedTerms);
       const shouldForceCapitalize =
         index === firstWordIndex || index === lastWordIndex || previousEndedClause;
+      const previousWordBeforeCurrent = previousWordCore;
 
       previousEndedClause = /[:.!?]$/.test(`${core}${suffix}`.trim());
 
@@ -294,7 +296,13 @@ function applyTitleCase(
         return `${prefix}${lowercaseCore}${suffix}`;
       }
 
-      return `${prefix}${capitalizeCompound(core, preservedTerms)}${suffix}`;
+      return `${prefix}${normalizeTitleWord(
+        core,
+        shouldForceCapitalize,
+        guide,
+        previousWordBeforeCurrent,
+        preservedTerms
+      )}${suffix}`;
     })
     .join("");
 }
@@ -322,7 +330,7 @@ function applySentenceCase(input: string, preservedTerms: Map<string, string>): 
         return token;
       }
 
-      const normalizedCore = normalizeCompoundWord(core, shouldCapitalize, false, preservedTerms);
+      const normalizedCore = normalizeSentenceWord(core, shouldCapitalize, preservedTerms);
 
       shouldCapitalize = false;
       if (/[.!?]["')\]]*$/.test(`${core}${suffix}`.trim())) {
@@ -335,7 +343,7 @@ function applySentenceCase(input: string, preservedTerms: Map<string, string>): 
 }
 
 function applyFirstLetterCase(input: string, preservedTerms: Map<string, string>): string {
-  return input.replace(/[A-Za-z0-9]+(?:[’'][A-Za-z0-9]+)*/gu, (word) =>
+  return input.replace(/[\p{L}\p{N}]+(?:[’'][\p{L}\p{N}]+)*/gu, (word) =>
     normalizeCompoundWord(word, true, true, preservedTerms)
   );
 }
@@ -356,14 +364,10 @@ function applyAlternatingCase(input: string): string {
     .join("");
 }
 
-function capitalizeCompound(input: string, preservedTerms: Map<string, string>): string {
-  return normalizeCompoundWord(input, true, true, preservedTerms);
-}
-
 function capitalizeWord(word: string): string {
   const lowercased = word.toLowerCase();
 
-  if (/^\d+[’'][a-z]+$/u.test(lowercased)) {
+  if (/^\d+[’']\p{L}+$/u.test(lowercased)) {
     return lowercased;
   }
 
@@ -466,6 +470,67 @@ function normalizeCompoundWord(
       });
     })
     .join("");
+}
+
+function normalizeSentenceWord(
+  word: string,
+  shouldCapitalize: boolean,
+  preservedTerms: Map<string, string>
+): string {
+  return word
+    .split(/(-)/)
+    .map((part, index) => {
+      if (part === "-") {
+        return part;
+      }
+
+      return normalizeWord(part, {
+        capitalizeFirstWord: shouldCapitalize && index === 0,
+        allowGenericUppercase: false,
+        preservedTerms
+      });
+    })
+    .join("");
+}
+
+function normalizeTitleWord(
+  word: string,
+  shouldForceCapitalize: boolean,
+  guide: StyleGuide,
+  previousWordCore: string | null,
+  preservedTerms: Map<string, string>
+): string {
+  const segments = word.split("-");
+  const isCompound = segments.length > 1;
+
+  return segments
+    .map((segment, index) => {
+      const lowercaseSegment = normalizeLookupKey(segment);
+      const segmentPreviousWord =
+        index === 0 ? previousWordCore : normalizeLookupKey(segments[index - 1] ?? "");
+      const shouldForceSegment =
+        (isCompound && (index === 0 || index === segments.length - 1)) ||
+        (index === 0 && shouldForceCapitalize);
+      const prioritizedSegment = preserveTerm(segment, true, preservedTerms);
+
+      if (prioritizedSegment) {
+        return prioritizedSegment;
+      }
+
+      if (
+        !shouldForceSegment &&
+        shouldLowercaseInTitle(lowercaseSegment, guide, segmentPreviousWord)
+      ) {
+        return lowercaseSegment;
+      }
+
+      return normalizeWord(segment, {
+        capitalizeFirstWord: true,
+        allowGenericUppercase: true,
+        preservedTerms
+      });
+    })
+    .join("-");
 }
 
 function normalizeLookupKey(word: string): string {
